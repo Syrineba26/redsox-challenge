@@ -215,7 +215,6 @@ def ingest_cleaned_schedules():
     WHERE gameId IS NOT NULL
     LIMIT 20
     """
-
     logging.info("Running CREATE OR REPLACE TABLE ...")
     query_job = client.query(query)
     query_job.result()
