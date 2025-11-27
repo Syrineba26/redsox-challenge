@@ -255,7 +255,6 @@ def backup_all_raw_tables():
         query_job.result()
 
         print(f"✅ Backup created for {table}: {backup_table}")
-
     print("All raw tables have been backed up successfully!")
 
 schedule.every().day.at("00:00").do(ingest_games_wide)
