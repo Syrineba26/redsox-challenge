@@ -223,10 +223,6 @@ def ingest_cleaned_schedules():
     logging.info("Table refreshed successfully.")
     print("✅ staging.cleaned_schedules updated.")
 
-from google.cloud import bigquery
-from datetime import datetime
-import logging
-
 def backup_all_raw_tables():
     client = bigquery.Client()
 
