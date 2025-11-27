@@ -18,7 +18,7 @@ def ingest_games_wide():
     query = """
     SELECT *
     FROM `bigquery-public-data.baseball.games_wide`
-    LIMIT 50
+    LIMIT 20
     """
 
     logging.info("Running query on public dataset...")
@@ -51,7 +51,7 @@ def ingest_games_post_wide():
     query = """
     SELECT *
     FROM `bigquery-public-data.baseball.games_post_wide`
-    LIMIT 50
+    LIMIT 20
     """
 
     logging.info("Running query on public dataset...")
@@ -82,7 +82,7 @@ def ingest_schedules():
     query = """
     SELECT *
     FROM `bigquery-public-data.baseball.schedules`
-    LIMIT 50
+    LIMIT 20
     """
 
     logging.info("Running query on public dataset...")
@@ -139,7 +139,7 @@ def ingest_cleaned_games_post_wide():
         awayFinalErrors AS away_final_errors
         FROM `redsox-bq-project.raw_data.games_post_wide`
         WHERE gameId IS NOT NULL
-        LIMIT 50
+        LIMIT 20
         """
 
     logging.info("Running CREATE OR REPLACE TABLE ...")
@@ -181,7 +181,7 @@ def ingest_cleaned_games_wide():
         awayFinalErrors AS away_final_errors
         FROM `redsox-bq-project.raw_data.games_wide`
         WHERE gameId IS NOT NULL
-        LIMIT 50
+        LIMIT 20
         """
 
     logging.info("Running CREATE OR REPLACE TABLE ...")
@@ -213,7 +213,7 @@ def ingest_cleaned_schedules():
     status
     FROM `redsox-bq-project.raw_data.schedules`
     WHERE gameId IS NOT NULL
-    LIMIT 50
+    LIMIT 20
     """
 
     logging.info("Running CREATE OR REPLACE TABLE ...")
@@ -222,6 +222,41 @@ def ingest_cleaned_schedules():
 
     logging.info("Table refreshed successfully.")
     print("✅ staging.cleaned_schedules updated.")
+
+from google.cloud import bigquery
+from datetime import datetime
+import logging
+
+def backup_all_raw_tables():
+    client = bigquery.Client()
+
+    # Create timestamp for snapshot table names
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # Raw tables to back up → add more if needed
+    tables_to_backup = [
+        "games_wide",
+        "games_post_wide",
+        "schedules"
+    ]
+
+    for table in tables_to_backup:
+        source_table = f"redsox-bq-project.raw_data.{table}"
+        backup_table = f"redsox-bq-project.raw_data_backup.{table}_backup_{timestamp}"
+
+        query = f"""
+        CREATE TABLE `{backup_table}` AS
+        SELECT *
+        FROM `{source_table}`;
+        """
+
+        logging.info(f"Backing up: {source_table} → {backup_table}")
+        query_job = client.query(query)
+        query_job.result()
+
+        print(f"✅ Backup created for {table}: {backup_table}")
+
+    print("All raw tables have been backed up successfully!")
 
 schedule.every().day.at("00:00").do(ingest_games_wide)
 schedule.every().day.at("00:00").do(ingest_games_post_wide)
@@ -234,7 +269,7 @@ if __name__ == "__main__":
     ingest_cleaned_games_post_wide()
     ingest_cleaned_games_wide()
     ingest_cleaned_schedules()
+    backup_all_raw_tables()
 
 #while True:
 #    schedule.run_pending()
-    
