@@ -498,3 +498,9 @@
 2025-11-28 00:28:19,072 - INFO - Backing up: redsox-bq-project.raw_data.games_wide \u2192 redsox-bq-project.raw_data_backup.games_wide_backup_20251128_002819
 2025-11-28 00:28:22,278 - INFO - Backing up: redsox-bq-project.raw_data.games_post_wide \u2192 redsox-bq-project.raw_data_backup.games_post_wide_backup_20251128_002819
 2025-11-28 00:28:24,436 - INFO - Backing up: redsox-bq-project.raw_data.schedules \u2192 redsox-bq-project.raw_data_backup.schedules_backup_20251128_002819
+2025-11-28 11:51:32,148 - INFO - Running CREATE OR REPLACE TABLE ...
+2025-11-28 11:51:34,556 - INFO - Table refreshed successfully.
+2025-11-28 11:53:14,678 - INFO - Running CREATE OR REPLACE TABLE ...
+2025-11-28 11:53:16,457 - INFO - Table refreshed successfully.
+2025-11-28 11:55:46,667 - INFO - Running CREATE OR REPLACE TABLE ...
+2025-11-28 11:55:51,486 - INFO - Table refreshed successfully.

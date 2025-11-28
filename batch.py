@@ -18,7 +18,7 @@ def ingest_games_wide():
     query = """
     SELECT *
     FROM `bigquery-public-data.baseball.games_wide`
-    LIMIT 20
+    # LIMIT 20
     """
 
     logging.info("Running query on public dataset...")
@@ -51,7 +51,7 @@ def ingest_games_post_wide():
     query = """
     SELECT *
     FROM `bigquery-public-data.baseball.games_post_wide`
-    LIMIT 20
+    # LIMIT 20
     """
 
     logging.info("Running query on public dataset...")
@@ -82,7 +82,7 @@ def ingest_schedules():
     query = """
     SELECT *
     FROM `bigquery-public-data.baseball.schedules`
-    LIMIT 20
+    # LIMIT 20
     """
 
     logging.info("Running query on public dataset...")
@@ -139,7 +139,7 @@ def ingest_cleaned_games_post_wide():
         awayFinalErrors AS away_final_errors
         FROM `redsox-bq-project.raw_data.games_post_wide`
         WHERE gameId IS NOT NULL
-        LIMIT 20
+        # LIMIT 20
         """
 
     logging.info("Running CREATE OR REPLACE TABLE ...")
@@ -181,7 +181,7 @@ def ingest_cleaned_games_wide():
         awayFinalErrors AS away_final_errors
         FROM `redsox-bq-project.raw_data.games_wide`
         WHERE gameId IS NOT NULL
-        LIMIT 20
+        # LIMIT 20
         """
 
     logging.info("Running CREATE OR REPLACE TABLE ...")
@@ -213,7 +213,7 @@ def ingest_cleaned_schedules():
     status
     FROM `redsox-bq-project.raw_data.schedules`
     WHERE gameId IS NOT NULL
-    LIMIT 20
+    # LIMIT 20
     """
     logging.info("Running CREATE OR REPLACE TABLE ...")
     query_job = client.query(query)
@@ -221,6 +221,61 @@ def ingest_cleaned_schedules():
 
     logging.info("Table refreshed successfully.")
     print("✅ staging.cleaned_schedules updated.")
+
+def ingest_cleaned_all_games_events():
+    client = bigquery.Client()
+
+    query = """
+    CREATE OR REPLACE TABLE staging.cleaned_all_games_events AS
+    WITH unified AS (
+        SELECT * FROM `staging.cleaned_games_wide`
+        UNION ALL
+        SELECT * FROM `staging.cleaned_games_post_wide`
+    ),
+    deduped AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY game_id, home_team_id, away_team_id, start_time
+                ORDER BY start_time DESC
+            ) AS rn
+        FROM unified
+    )
+    SELECT
+        game_id,
+        season_id,
+        season_type,
+        year,
+        start_time,
+        game_status,
+        attendance,
+        day_night,
+        duration_minutes,
+        away_team_id,
+        away_team_name,
+        home_team_id,
+        home_team_name,
+        venue_id,
+        venue_name,
+        venue_capacity,
+        venue_city,
+        venue_state,
+        home_final_runs,
+        home_final_hits,
+        home_final_errors,
+        away_final_runs,
+        away_final_hits,
+        away_final_errors
+    FROM deduped
+    WHERE rn = 1
+    # LIMIT 20
+    """
+    logging.info("Running CREATE OR REPLACE TABLE ...")
+    query_job = client.query(query)
+    query_job.result()
+
+    logging.info("Table refreshed successfully.")
+    print("✅ staging.cleaned_all_games_events updated.")
 
 def backup_all_raw_tables():
     client = bigquery.Client()
@@ -259,6 +314,11 @@ schedule.every().day.at("02:00").do(backup_all_raw_tables)
 schedule.every().day.at("02:00").do(ingest_games_wide)
 schedule.every().day.at("02:00").do(ingest_games_post_wide)
 schedule.every().day.at("02:00").do(ingest_schedules)
+schedule.every().day.at("02:00").do(ingest_cleaned_games_post_wide)
+schedule.every().day.at("02:00").do(ingest_cleaned_games_wide)
+schedule.every().day.at("02:00").do(ingest_cleaned_schedules)
+schedule.every().day.at("02:00").do(ingest_cleaned_all_games_events)
+
 
 if __name__ == "__main__":
     ingest_games_wide()
@@ -267,6 +327,7 @@ if __name__ == "__main__":
     ingest_cleaned_games_post_wide()
     ingest_cleaned_games_wide()
     ingest_cleaned_schedules()
+    ingest_cleaned_all_games_events()
     backup_all_raw_tables()
 
 #while True:
