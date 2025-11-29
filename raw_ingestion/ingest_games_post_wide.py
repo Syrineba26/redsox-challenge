@@ -9,7 +9,6 @@ def ingest_games_post_wide():
     SELECT *
     FROM `bigquery-public-data.baseball.games_post_wide`
     """
-
     logging.info("Running query on public dataset...")
     query_job = client.query(query)
     results = query_job.result()
