@@ -7,20 +7,21 @@ def ingest_dim_team():
     query = """
     CREATE OR REPLACE TABLE marts.dim_team AS
     SELECT DISTINCT
+    team_id,
+    team_name
+    FROM (
+    SELECT
         home_team_id AS team_id,
-        home_team_name AS team_name,
-        venue_city AS city,
-        venue_state AS state
+        home_team_name AS team_name
     FROM staging.cleaned_all_games_events
 
     UNION DISTINCT
 
-    SELECT DISTINCT
+    SELECT
         away_team_id AS team_id,
-        away_team_name AS team_name,
-        venue_city AS city,
-        venue_state AS state
-    FROM staging.cleaned_all_games_events
+        away_team_name AS team_name
+        FROM staging.cleaned_all_games_events
+    )
     """
     logging.info("Running CREATE OR REPLACE TABLE ...")
     query_job = client.query(query)
