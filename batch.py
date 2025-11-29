@@ -14,7 +14,6 @@ from staging.cleaned_games_post_wide import ingest_cleaned_games_post_wide
 from staging.cleaned_all_games_events import ingest_cleaned_all_games_events
 from staging.cleaned_schedules import ingest_cleaned_schedules
 
-from marts.dim_team import ingest_dim_team
 from marts.dim_season import ingest_dim_season
 from marts.dim_venue import ingest_dim_venue
 from marts.fact_game_summary import ingest_fact_game_summary
@@ -32,7 +31,6 @@ if __name__ == "__main__":
     ingest_cleaned_games_wide()
     ingest_cleaned_all_games_events()
     ingest_cleaned_schedules()
-    ingest_dim_team()
     ingest_dim_season()
     ingest_dim_venue()
     ingest_fact_game_summary()
