@@ -12,7 +12,7 @@ def ingest_dim_venue():
     venue_city,
     venue_state,
     venue_capacity
-    FROM staging.cleaned_all_tables
+    FROM staging.cleaned_all_games_events
     """
     logging.info("Running CREATE OR REPLACE TABLE ...")
     query_job = client.query(query)

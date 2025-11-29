@@ -689,3 +689,6 @@
 2025-11-29 17:25:01,724 - INFO - Backing up: redsox-bq-project.raw_data.games_wide \u2192 redsox-bq-project.raw_data_backup.games_wide_backup_20251129_172501
 2025-11-29 17:25:06,567 - INFO - Backing up: redsox-bq-project.raw_data.games_post_wide \u2192 redsox-bq-project.raw_data_backup.games_post_wide_backup_20251129_172501
 2025-11-29 17:25:09,342 - INFO - Backing up: redsox-bq-project.raw_data.schedules \u2192 redsox-bq-project.raw_data_backup.schedules_backup_20251129_172501
+2025-11-29 22:22:56,863 - INFO - Running query on public dataset...
+2025-11-29 22:22:59,823 - INFO - Query completed successfully.
+2025-11-29 22:22:59,824 - INFO - Loading data into redsox-bq-project.raw_data.games_wide ...

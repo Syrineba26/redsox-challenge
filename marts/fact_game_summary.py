@@ -28,8 +28,15 @@ def ingest_fact_game_summary():
     home_final_hits,
     away_final_hits,
     home_final_errors,
-    away_final_errors
-    FROM staging.cleaned_all_games_events;
+    away_final_errors,
+    CASE WHEN home_final_runs > away_final_runs THEN 1 ELSE 0 END AS is_home_win,
+    CASE WHEN away_final_runs > home_final_runs THEN 1 ELSE 0 END AS is_away_win,
+    CASE
+        WHEN duration_minutes < 150 THEN 'Short'
+        WHEN duration_minutes BETWEEN 150 AND 180 THEN 'Medium'
+        ELSE 'Long'
+    END AS duration_category
+    FROM staging.cleaned_all_games_events
     """
     logging.info("Running CREATE OR REPLACE TABLE ...")
     query_job = client.query(query)
