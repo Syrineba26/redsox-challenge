@@ -1,7 +1,7 @@
 from google.cloud import bigquery
 import logging
 
-def ingest_dim_team():
+def ingest_dim_venue():
     client = bigquery.Client()
 
     query = """

@@ -5,12 +5,11 @@ def ingest_fact_game_summary():
     client = bigquery.Client()
 
     query = """
-    CREATE OR REPLACE TABLE marts.fact_game_summary AS
+   CREATE OR REPLACE TABLE marts.fact_game_summary AS
     SELECT
     game_id,
     season_id,
     year,
-    start_time,
     game_status,
     attendance,
     day_night,
@@ -30,7 +29,7 @@ def ingest_fact_game_summary():
     away_final_hits,
     home_final_errors,
     away_final_errors
-    FROM staging.cleaned_all_games_events
+    FROM staging.cleaned_all_games_events;
     """
     logging.info("Running CREATE OR REPLACE TABLE ...")
     query_job = client.query(query)

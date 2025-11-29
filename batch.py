@@ -15,6 +15,8 @@ from staging.cleaned_all_games_events import ingest_cleaned_all_games_events
 from staging.cleaned_schedules import ingest_cleaned_schedules
 
 from marts.dim_team import ingest_dim_team
+from marts.dim_season import ingest_dim_season
+from marts.dim_venue import ingest_dim_venue
 from marts.fact_game_summary import ingest_fact_game_summary
 from marts.fact_team_performance import ingest_fact_team_performance
 
