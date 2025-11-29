@@ -2,6 +2,7 @@ from google.cloud import bigquery
 import logging
 from datetime import datetime
 
+
 def backup_all_raw_tables():
     client = bigquery.Client()
 
