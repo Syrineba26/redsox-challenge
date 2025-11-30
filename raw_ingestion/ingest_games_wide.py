@@ -6,6 +6,7 @@ def ingest_games_wide():
     client = bigquery.Client()
 
     query = """
+    CREATE OR REPLACE TABLE `redsox-bq-project.raw_data.games_wide` AS
     SELECT *
     FROM `bigquery-public-data.baseball.games_wide`
     """
