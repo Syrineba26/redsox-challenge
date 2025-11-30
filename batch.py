@@ -5,6 +5,8 @@ import schedule
 
 from config.logging_config import setup_logging
 
+from utils.check_new_data import has_new_data
+
 from raw_ingestion.ingest_games_wide import ingest_games_wide
 from raw_ingestion.ingest_games_post_wide import ingest_games_post_wide
 from raw_ingestion.ingest_schedules import ingest_schedules
@@ -24,15 +26,24 @@ from backup.backup_raw_tables import backup_all_raw_tables
 
 if __name__ == "__main__":
     setup_logging()
+    # Check new rows before ingestion
+    if not has_new_data():
+        logging.info("No new data → stopping pipeline.")
+        exit()
+
+    # RAW ingestion
     ingest_games_wide()
     ingest_games_post_wide()
     ingest_schedules()
+    # Staging
     ingest_cleaned_games_post_wide()
     ingest_cleaned_games_wide()
     ingest_cleaned_all_games_events()
     ingest_cleaned_schedules()
+    # Marts
     ingest_dim_season()
     ingest_dim_venue()
     ingest_fact_game_summary()
     ingest_fact_team_performance()
+    # Backup
     backup_all_raw_tables()

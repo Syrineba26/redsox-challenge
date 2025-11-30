@@ -28,6 +28,8 @@ def ingest_schedules():
         job_config=job_config
     )
 
+    df = results.to_dataframe()  
+    df["ingestion_time"] = datetime.utcnow()  
     load_job.result() 
     logging.info(f"Data loaded successfully into {table_id}.")
     print(f"✅ Batch ingestion completed at {datetime.now()}")

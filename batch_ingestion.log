@@ -692,3 +692,10 @@
 2025-11-29 22:22:56,863 - INFO - Running query on public dataset...
 2025-11-29 22:22:59,823 - INFO - Query completed successfully.
 2025-11-29 22:22:59,824 - INFO - Loading data into redsox-bq-project.raw_data.games_wide ...
+2025-11-30 01:19:43,529 - INFO - No new data \u2192 stopping pipeline.
+2025-11-30 01:24:02,354 - INFO - No new data \u2192 stopping pipeline.
+2025-11-30 01:28:49,957 - INFO - No new data \u2192 stopping pipeline.
+2025-11-30 01:29:16,615 - INFO - No new data \u2192 stopping pipeline.
+2025-11-30 01:43:31,516 - INFO - No new data \u2192 stopping pipeline.
+2025-11-30 01:44:02,699 - INFO - No new data \u2192 stopping pipeline.
+2025-11-30 01:44:36,383 - INFO - No new data \u2192 stopping pipeline.
