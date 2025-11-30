@@ -38,7 +38,7 @@ SELECT
     SUM(runs_allowed) AS total_runs_allowed,
     SUM(hits) AS total_hits,
     SUM(errors) AS total_errors
-    FROM all_games
+    FROM cleaned_all_games_events
     GROUP BY season_id, team_id, team_name
     """
     logging.info("Running CREATE OR REPLACE TABLE ...")
